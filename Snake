@@ -1,0 +1,137 @@
+
+using System.Linq;
+
+Random rnd = new Random();
+List<(int, int)> snake = new List<(int, int)>();
+int taille = 12;
+Console.SetWindowSize(taille, taille);
+
+(int, int) newtete = (0, 0);
+
+(int xtete, int ytete) = (rnd.Next(taille), rnd.Next(taille));
+snake.Add((xtete, ytete));
+
+(int xpomme, int ypomme) = (0, 0);
+do
+{
+    (xpomme, ypomme) = (rnd.Next(taille), rnd.Next(taille));
+} while (snake.Contains((xpomme, ypomme)) == true);
+
+
+
+Console.SetWindowSize(taille*2, taille);
+
+bool perdu = false;
+int direction = 0;
+do
+{
+    if (Console.KeyAvailable)
+    {
+        ConsoleKeyInfo key = Console.ReadKey(true);
+        switch (key.Key)
+        {
+            case ConsoleKey.UpArrow:
+                direction = 1;
+                break;
+            case ConsoleKey.DownArrow:
+                direction = 2;
+                break;
+            case ConsoleKey.LeftArrow:
+                direction = 3;
+                break;
+            case ConsoleKey.RightArrow:
+                direction = 4;
+                break;
+            default:
+                break;
+        }
+    }
+    switch (direction)
+    {
+        case 1:
+            newtete = (xtete - 1, ytete);
+            if (snake.Contains((newtete)) == true) perdu = true;
+            snake.Add(newtete);
+            if ((xtete, ytete) != (xpomme, ypomme)) snake.Remove(snake[0]);
+            break;
+        case 2:
+            newtete = (xtete + 1, ytete);
+            if (snake.Contains((newtete)) == true) perdu = true;
+            snake.Add(newtete);
+            if ((xtete, ytete) != (xpomme, ypomme)) snake.Remove(snake[0]);
+            break;
+        case 3:
+            newtete = (xtete, ytete - 1);
+            if (snake.Contains((newtete)) == true) perdu = true;
+            snake.Add(newtete);
+            if ((xtete, ytete) != (xpomme, ypomme)) snake.Remove(snake[0]);
+            break;
+        case 4:
+            newtete = (xtete, ytete + 1);
+            if (snake.Contains((newtete)) == true) perdu = true;
+            snake.Add(newtete);
+            if ((xtete, ytete) != (xpomme, ypomme)) snake.Remove(snake[0]);
+            break;
+    }
+    if ((xtete, ytete) == (xpomme, ypomme))
+    {
+        Console.Beep(2000, 200);
+        do
+        {
+            (xpomme, ypomme) = (rnd.Next(taille), rnd.Next(taille));
+        } while (snake.Contains((xpomme, ypomme)) == true);
+    }
+
+    if (newtete.Item1 == taille || newtete.Item2 == taille) perdu = true;
+    if (newtete.Item1 == -1 || newtete.Item2 == -1) perdu = true;
+
+    (xtete, ytete) = (snake[snake.Count - 1]);
+
+    for (int x = 0; x < taille; x++)
+    {
+        for (int y = 0; y < taille; y++)
+        {
+
+            if (snake[snake.Count() - 1] == (x, y))
+            {
+                Console.ForegroundColor = ConsoleColor.Magenta; Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.SetCursorPosition(y*2, x);
+                Console.Write("a");
+                Console.SetCursorPosition(y * 2 +1, x);
+                Console.Write("a");
+            }
+            else if ((x, y) == (xpomme, ypomme))
+            {
+                Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(y*2, x);
+                Console.Write("a");
+                Console.SetCursorPosition(y * 2 + 1, x);
+                Console.Write("a");
+            }
+            else if (snake.Contains((x, y)) == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Green; Console.BackgroundColor = ConsoleColor.Green;
+                Console.SetCursorPosition(y*2, x);
+                Console.Write("a");
+                Console.SetCursorPosition(y * 2 + 1, x);
+                Console.Write("a");
+            }
+            else if (snake.Contains((x, y)) == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue; Console.BackgroundColor = ConsoleColor.Blue;
+                Console.SetCursorPosition(y*2, x);
+                Console.Write("a");
+                Console.SetCursorPosition(y * 2 + 1, x);
+                Console.Write("a");
+            }
+        }
+    }
+    Thread.Sleep(200);
+} while (perdu == false);
+Console.Beep(500, 1000);
+Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.Black;
+Console.Clear();
+Console.WriteLine($"Score: {snake.Count - 1}");
+Console.ForegroundColor = ConsoleColor.Black;
+
+
