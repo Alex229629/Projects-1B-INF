@@ -1,0 +1,126 @@
+bool victory1 = false;
+bool victory2 = false;
+int selection = 4;
+int[,] map = new int[7, 7];
+Console.SetWindowSize(14, 9);
+do
+{
+    Placement(map, 1, ref selection);
+    PlacerJeton(map, 1, selection);
+    victory1 = VerifVict(map, 1);
+    if (victory1) break;
+    Placement(map, 2, ref selection);
+    PlacerJeton(map, 2, selection);
+    victory2 = VerifVict(map, 2);
+} while (victory1 == false && victory2 == false);
+
+Console.SetWindowSize(50, 20);
+AffichageMap(0, map, 1);
+Console.BackgroundColor = ConsoleColor.Black; Console.ForegroundColor = ConsoleColor.White;
+Console.WriteLine();
+if (victory1)
+    Console.WriteLine("Yellow Won");
+else
+    Console.WriteLine("Red Won");
+Console.ForegroundColor = ConsoleColor.Black;
+
+void Placement(int[,] tab, int player, ref int selec)
+{
+    ConsoleKeyInfo cki;
+    do
+    {
+        AffichageMap(selec, tab, player);
+        cki = Console.ReadKey();
+        if (cki.Key == ConsoleKey.LeftArrow)
+            if (selec > 1) selec--;
+        else if (cki.Key == ConsoleKey.RightArrow)
+            if (selec < 7) selec++;
+        Console.Clear();
+    } while (cki.Key != ConsoleKey.Enter);
+}
+void PlacerJeton(int[,] plat, int player, int selection)
+{
+    for(int i = 6; i >= 0; i--)
+    {
+        if (plat[i, selection - 1] == 0)
+        { plat[i, selection - 1] = player; break;}
+    }
+}
+bool VerifVict(int[,] map, int player)
+{
+    for (int x = 1; x < 7 ; x++)
+    {
+        for (int y = 0; y < 7; y++)
+        {
+            if (map[x,y] == player)
+            {
+                if (x + 3 < 7)
+                    if (map[x + 1, y] == player && map[x + 2, y] == player && map[x + 3, y] == player) return true;
+                if (x - 3 > 0)
+                    if (map[x - 1, y] == player && map[x - 2, y] == player && map[x - 3, y] == player) return true;
+
+                if (y + 3 < 7)
+                    if (map[x, y + 1] == player && map[x, y + 2] == player && map[x, y + 3] == player) return true;
+                if (y - 3 > 0)
+                    if (map[x, y - 1] == player && map[x, y - 2] == player && map[x, y - 3] == player) return true;
+
+                if (x + 3 < 7 && y - 3 > 0)
+                    if (map[x + 1, y - 1] == player && map[x + 2, y - 2] == player && map[x + 3, y - 3] == player) return true;
+                if (x - 3 > 0 && y + 3 < 7)
+                    if (map[x - 1, y + 1] == player && map[x - 2, y + 2] == player && map[x - 3, y + 3] == player) return true;
+
+                if (x - 3 > 0 && y - 3 > 0)
+                    if (map[x - 1, y - 1] == player && map[x - 2, y - 2] == player && map[x - 3, y - 3] == player) return true;
+                if (x + 3 < 7 && y + 3 < 7)
+                    if (map[x + 1, y + 1] == player && map[x + 2, y + 2] == player && map[x + 3, y + 3] == player) return true;
+            }
+        }
+    }
+    return false;
+}
+void AffichageMap(int selec, int[,] tab, int player)
+{
+  for(int i = 1; i < 8; i++)
+        if (selec == i)
+        {
+            if (player == 1)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkYellow; Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("11");
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed; Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("11");
+            }        
+        }
+        else
+        {
+            Console.BackgroundColor = ConsoleColor.White; Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("00");
+        }
+    Console.WriteLine();
+  for(int x = 0; x < 7; x++)
+    {
+        for (int y = 0; y < 7; y++)
+        {
+            if (tab[x,y] == 1)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkYellow; Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write("11");
+            }
+            else if (tab[x,y] == 2)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed; Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("22");
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkCyan; Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.Write("00");
+            }
+        }
+        Console.BackgroundColor = ConsoleColor.Black; Console.ForegroundColor = ConsoleColor.Black;
+        Console.WriteLine();
+    }
+}
