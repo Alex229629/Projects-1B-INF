@@ -1,0 +1,198 @@
+string[] dico = System.IO.File.ReadAllLines(@"C:\Users\leroy\OneDrive\Bureau\listefr.txt");
+Random rnd = new Random();
+string random = dico[rnd.Next(0, dico.Length)];
+string spec = "éèàçêâôûùïöüî";
+string norm = "eeaceaouuioui";
+string word= "" ;
+for (int i = 0; i < random.Length; i++)
+{
+    char c = random[i];
+    int index = spec.IndexOf(c);
+    if (index == -1)
+    {
+        word = word + c;
+    }
+    else
+    {
+        word = word + norm[index];
+    }
+}
+
+
+string majWord = word.ToUpper();
+List<char> wrongLettres = new List<char>();
+List<char> goodLettres = new List<char>();
+
+List<char> lettres = new List<char>();
+string[] lettresT = majWord.Split();
+int nbchar = majWord.Length;
+string input;
+bool lettreok = false ;
+int nberreur = 0;
+int bon = 0;
+
+
+for (int i = 0; i < majWord.Length; i++)
+{
+    char caract = majWord[i];
+    lettres.Add(caract);
+}
+if(majWord.Contains('-') == true)
+{
+    bon = bon + 1;
+}
+
+do
+{
+        lettreok = false;
+        input = Console.ReadLine();
+        input = input.ToUpper();
+        Console.Clear();
+        if (input.Length == 1)
+            {
+                for (int i = 0; i < lettres.Count; i++)
+                {
+                    if (char.Parse(input) == lettres[i])
+                    {
+                        Console.Write($"{input} ");
+                        lettreok = true;
+                        if (goodLettres.Contains(char.Parse(input)) == false)
+                        {
+                            goodLettres.Add(char.Parse(input));
+                            bon = bon + 1;
+                        }
+                        else if (goodLettres.Contains(char.Parse(input)) == true)
+                        {
+                            bon = bon + 1;
+                        }
+                    }
+                    else if (goodLettres.Contains(lettres[i]) == true)
+                    {
+                        for (int h = 0; h < goodLettres.Count; h++)
+                        {
+                            if (lettres[i] == goodLettres[h])
+                            {
+                                Console.Write($"{goodLettres[h]} ");
+                            }
+                        }
+                    }else if (lettres[i] == '-')
+                    {
+                    Console.Write("- ");
+                    }
+                    else
+                    {
+                        Console.Write("_ ");
+                    }
+                }
+        Console.WriteLine();
+        if (lettreok == true)
+                {
+                    Console.WriteLine("La lettre était dans le mot");
+                }
+                else
+                {
+                    Console.WriteLine("La lettre n'était pas dans le mot");
+                    wrongLettres.Add(char.Parse(input));
+                    nberreur++;
+                }
+                lettreok = false;
+        Console.WriteLine();
+        Console.Write($"Mauvaises lettres:");
+        for (int i = 0; i < wrongLettres.Count; i++)
+        {
+            Console.Write(wrongLettres[i]);
+            Console.Write(" ");
+        }
+        Console.WriteLine();
+        }
+            else
+            {
+                if (input.ToUpper() == majWord)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Mot {word} trouvé ! ");
+                    nberreur = 7;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Mauvais mot, réessayez ! ");
+                    nberreur++;
+                }
+            }
+            if (bon == (lettres.Count))
+            {
+                nberreur = 7;
+            }
+            switch (nberreur)
+            {
+        case 0:
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+            Console.WriteLine($" ");
+            Console.WriteLine($"");
+            break;
+        case 1:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+            Console.WriteLine($" ");
+            Console.WriteLine($"");
+            break;
+        case 2:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+
+            break;
+        case 3:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"  _|");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"    ");
+            Console.WriteLine($"");
+
+            break;
+        case 4:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"  _|_");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"");
+            Console.WriteLine($"");
+            break;
+        case 5:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"  _|_");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"  |  ");
+            Console.WriteLine($"");
+            break;
+        case 6:
+            Console.WriteLine($"");
+            Console.WriteLine($"   O");
+            Console.WriteLine($"  _|_");
+            Console.WriteLine($"   |");
+            Console.WriteLine($"  | | ");
+            Console.WriteLine($"");
+            break;     
+    }
+
+} while (nberreur < 6);
+                Console.Clear();
+                if (nberreur == 6)
+                {
+                    Console.WriteLine($"Perdu chacal, le mot était {majWord}");
+                }
+                else
+                {
+                    Console.WriteLine("Bien ouej chacal");
+                }
