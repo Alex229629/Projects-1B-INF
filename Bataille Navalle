@@ -1,0 +1,459 @@
+AffichageStart();
+AffichageSuivant();
+
+bool winJ1 = false;
+int[,] MapJ1 = new int[10, 10];
+int[,] MapJ1Temp = new int[10, 10];
+List<(int, int)> listcotirJ1 = new List<(int, int)>();
+List<(int, int)> listBatPlacJ1 = new List<(int, int)>();
+(int, int)[] J1Bat5 = new (int, int)[5];
+(int, int)[] J1Bat4 = new (int, int)[4];
+(int, int)[] J1Bat3x1 = new (int, int)[3];
+(int, int)[] J1Bat3x2 = new (int, int)[3];
+(int, int)[] J1Bat2 = new (int, int)[2];
+(int, int)[] J1Bat5Temp = new (int, int)[5];
+(int, int)[] J1Bat4Temp = new (int, int)[4];
+(int, int)[] J1Bat3x1Temp = new (int, int)[3];
+(int, int)[] J1Bat3x2Temp = new (int, int)[3];
+(int, int)[] J1Bat2Temp = new (int, int)[2];
+CreationBat(5, J1Bat5Temp, J1Bat5, MapJ1Temp, 1, listBatPlacJ1, 1);
+PlacerBateau(J1Bat5, MapJ1, 1);
+CreationBat(4, J1Bat4Temp, J1Bat4, MapJ1Temp, 2, listBatPlacJ1, 1);
+PlacerBateau(J1Bat4, MapJ1, 2);
+CreationBat(3, J1Bat3x1Temp, J1Bat3x1, MapJ1Temp, 3, listBatPlacJ1, 1);
+PlacerBateau(J1Bat3x1, MapJ1, 3);
+CreationBat(3, J1Bat3x2Temp, J1Bat3x2, MapJ1Temp, 4, listBatPlacJ1, 1);
+PlacerBateau(J1Bat3x2, MapJ1, 3);
+CreationBat(2, J1Bat2Temp, J1Bat2, MapJ1Temp, 5, listBatPlacJ1, 1);
+PlacerBateau(J1Bat2, MapJ1, 3);
+AffichageSuivant();
+
+bool winJ2 = false;
+int[,] MapJ2 = new int[10, 10];
+int[,] MapJ2Temp = new int[10, 10];
+List<(int, int)> listcotirJ2 = new List<(int, int)>();
+List<(int, int)> listBatPlacJ2 = new List<(int, int)>();
+(int, int)[] J2Bat5 = new (int, int)[5];
+(int, int)[] J2Bat4 = new (int, int)[4];
+(int, int)[] J2Bat3x1 = new (int, int)[3];
+(int, int)[] J2Bat3x2 = new (int, int)[3];
+(int, int)[] J2Bat2 = new (int, int)[2];
+(int, int)[] J2Bat5Temp = new (int, int)[5];
+(int, int)[] J2Bat4Temp = new (int, int)[4];
+(int, int)[] J2Bat3x1Temp = new (int, int)[3];
+(int, int)[] J2Bat3x2Temp = new (int, int)[3];
+(int, int)[] J2Bat2Temp = new (int, int)[2];
+CreationBat(5, J2Bat5Temp, J2Bat5, MapJ2Temp, 1, listBatPlacJ2, 2);
+PlacerBateau(J2Bat5, MapJ2, 1);
+CreationBat(4, J2Bat4Temp, J2Bat4, MapJ2Temp, 2, listBatPlacJ2, 2);
+PlacerBateau(J1Bat4, MapJ2, 2);
+CreationBat(3, J2Bat3x1Temp, J2Bat3x1, MapJ2Temp, 3, listBatPlacJ2, 2);
+PlacerBateau(J2Bat3x1, MapJ2, 3);
+CreationBat(3, J2Bat3x2Temp, J2Bat3x2, MapJ2Temp, 4, listBatPlacJ2, 2);
+PlacerBateau(J2Bat3x2, MapJ2, 3);
+CreationBat(2, J2Bat2Temp, J2Bat2, MapJ2Temp, 5, listBatPlacJ2, 2);
+PlacerBateau(J2Bat2, MapJ2, 3);
+AffichageSuivant();
+
+do
+{
+    AfficherMapJ(MapJ2, 2);
+    Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Black;
+    Console.WriteLine("Joueur 1, à vous de jouer");
+    Console.Write("Entrez une coordonée(Ex: C7): ");
+    EnregistrerTirs(MapJ2, listcotirJ2);
+    VerifTC(MapJ2);
+    Console.Clear();
+    AfficherMapJ(MapJ2, 2);
+    AffichageSuivant();
+    winJ1 = VerifVict(MapJ2);
+    AfficherMapJ(MapJ1, 1);
+    if (winJ1 == true) break;
+    Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Black;
+    Console.WriteLine("Joueur 2, à vous de jouer");
+    Console.Write("Entrez une coordonée(Ex: B5): ");
+    EnregistrerTirs(MapJ1, listcotirJ1);
+    VerifTC(MapJ1);
+    Console.Clear();
+    AfficherMapJ(MapJ1, 1);
+    AffichageSuivant();
+    winJ2 = VerifVict(MapJ1);
+} while ((winJ1 == false) || (winJ2 == false));
+
+Console.Clear();
+Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Black;
+if (winJ1 == true) Console.WriteLine("Gagnant: J1");
+else Console.WriteLine("Gagnant: J2");
+
+void CreationBat(int taillebat, (int, int)[] JBat, (int, int)[] JBatFin, int[,] MapJ, int nbbateau, List<(int, int)> listBatPlacJ, int J)
+{
+    (int xpos1, int ypos1) = (0, 0);
+    string direction = "hori";
+    ConsoleKeyInfo cki;
+    do
+    {
+        Console.Clear();
+        AfficherMapJPlac(MapJ, listBatPlacJ, J);
+        cki = Console.ReadKey();
+        if (cki.Key == ConsoleKey.Spacebar)
+        {
+            if (direction == "hori")
+            {
+                if (ypos1 <= 10 - taillebat) direction = "vert";
+            }
+            else
+            {
+                if (xpos1 <= 10 - taillebat) direction = "hori";
+            }
+        }
+        else if (cki.Key == ConsoleKey.UpArrow)
+        {
+            if (direction == "hori")
+            {
+                if (ypos1 > 0)
+                {
+                    ypos1--;
+                }
+            }
+            else if (direction == "vert")
+            {
+                if (ypos1 > 0)
+                {
+                    ypos1--;
+                }
+            }
+        }
+        else if (cki.Key == ConsoleKey.DownArrow)
+        {
+            if (direction == "hori")
+            {
+                if (ypos1 < 9)
+                {
+                    ypos1++;
+                }
+            }
+            else if (direction == "vert")
+            {
+                if (ypos1 < 10 - taillebat)
+                {
+                    ypos1++;
+                }
+            }
+        }
+        else if (cki.Key == ConsoleKey.LeftArrow)
+        {
+            if (direction == "hori")
+            {
+                if (xpos1 > 0)
+                {
+                    xpos1--;
+                }
+            }
+            else if (direction == "vert")
+            {
+                if (xpos1 > 0)
+                {
+                    xpos1--;
+                }
+            }
+        }
+        else if (cki.Key == ConsoleKey.RightArrow)
+        {
+            if (direction == "hori")
+            {
+                if (xpos1 < 10 - taillebat) xpos1++;
+            }
+            else if (direction == "vert")
+            {
+                if (xpos1 < 9) xpos1++;
+            }
+        }
+
+        if (direction == "hori")
+        {
+            for (int i = 0; i < taillebat; i++)
+            {
+                JBat[i] = (xpos1 + i, ypos1);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < taillebat; i++)
+            {
+                JBat[i] = (xpos1, ypos1 + i);
+            }
+        }
+
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                MapJ[x, y] = 0;
+            }
+        }
+        for (int x = 0; x < 10; x++)
+        {
+            for (int y = 0; y < 10; y++)
+            {
+                for (int i = 0; i < JBat.Length; i++)
+                {
+                    if ((x, y) == JBat[i])  MapJ[x, y] = nbbateau;
+                }
+            }
+        }
+
+    } while (cki.Key != ConsoleKey.Enter);
+    if (direction == "hori")
+    {
+        for (int i = 0; i < taillebat; i++)
+        {
+            JBatFin[i] = (xpos1 + i, ypos1);
+            listBatPlacJ.Add((xpos1 + i, ypos1));
+        }
+    }
+    else
+    {
+        for (int i = 0; i < taillebat; i++)
+        {
+            JBatFin[i] = (xpos1, ypos1 + i);
+            listBatPlacJ.Add((xpos1, ypos1 + i));
+        }
+    } 
+}
+
+void AfficherMapJPlac(int[,] MapJ, List<(int, int)> listBatPlacJ, int J)
+{
+    Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.White;
+    if (J == 1) Console.Write("J1");
+    if (J == 2) Console.Write("J2");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+    Console.WriteLine("1 2 3 4 5 6 7 8 9 10  ");
+    string lettres = "ABCDEFGHIJ";
+    for (int y = 0; y < 10; y++)
+    {
+        Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+        Console.Write(lettres[y] + " ");
+        for (int x = 0; x < 10; x++)
+        {
+            if (listBatPlacJ.Contains((x, y)) == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("aa");
+            }
+            else if (MapJ[x, y] == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue; Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Write("aa");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("aa");
+            }
+        }
+        Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+        Console.Write("  ");
+        Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Black;
+        Console.WriteLine();
+    }
+    Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+    Console.Write("                        ");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Black;
+    Console.WriteLine();
+}
+
+
+void AffichageStart()
+{
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.BackgroundColor = ConsoleColor.Black;
+    Console.Write("    ");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("La Bataille Navale");
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.Write("       ");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("Alexis Leroy");
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.Write("          ");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("1B INF");
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.Write("      ");
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    Console.WriteLine("Bateaux Coulés");
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.Write("      ");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine("Bateaux Touchés");
+    Console.ForegroundColor = ConsoleColor.Black;
+    Console.Write("      ");
+    Console.ForegroundColor = ConsoleColor.DarkBlue;
+    Console.WriteLine("Tirs Ratés");
+
+    Console.ForegroundColor = ConsoleColor.Black;
+}
+void AffichageSuivant()
+{ Console.ReadKey(); Console.Clear(); }
+void AfficherMapJDepart(int[,] MapJ, int J)
+{
+    Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.White;
+    if (J == 1) Console.Write("J1");
+    if (J == 2) Console.Write("J2");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+    Console.WriteLine("1 2 3 4 5 6 7 8 9 10  ");
+    string lettres = "ABCDEFGHIJ";
+    for (int y = 0; y < 10; y++)
+    {
+        Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+        Console.Write(lettres[y] + " ");
+        for (int x = 0; x < 10; x++)
+        {
+            if (MapJ[x, y] == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Blue; Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Write("aa");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("aa");
+            }
+        }
+        Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+        Console.Write("  ");
+        Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Black;
+        Console.WriteLine();
+    }
+    Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+    Console.Write("                        ");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Black;
+    Console.WriteLine();
+}
+void AfficherMapJ(int[,] MapJ, int J)
+{
+    Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.White;
+    if (J == 1) Console.Write("J1");
+    if (J == 2) Console.Write("J2");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+    Console.WriteLine("1 2 3 4 5 6 7 8 9 10  ");
+    for (int y = 0; y < 10; y++)
+    {
+        Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.White;
+        string lettres = "ABCDEFGHIJ";
+        Console.Write(lettres[y] + " ");
+        for (int x = 0; x < 10; x++)
+        {
+            if (MapJ[x, y] == 6)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow; Console.BackgroundColor = ConsoleColor.DarkYellow;
+                Console.Write("aa");
+            }
+            else if (MapJ[x, y] < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red; Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("aa");
+            }
+            else if (MapJ[x, y] == 7)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue; Console.BackgroundColor = ConsoleColor.DarkBlue;
+                Console.Write("aa");
+            }
+
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue; Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Write("aa");
+            }
+        }
+        Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+        Console.WriteLine("  ");
+    }
+    Console.ForegroundColor = ConsoleColor.White; Console.BackgroundColor = ConsoleColor.White;
+    Console.Write("                        ");
+    Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Black;
+    Console.WriteLine();
+}
+
+void PlacerBateau((int, int)[] JBat, int[,] MapJ, int nbbateau)
+{
+    for (int x = 0; x < 10; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            for (int i = 0; i < JBat.Length; i++)
+            {
+                if ((x, y) == JBat[i])  MapJ[x, y] = nbbateau;
+            }
+        }
+    }
+}
+void EnregistrerTirs(int[,] MapJ, List<(int, int)> listcotirJ)
+{
+    string lettres = "ABCDEFGHIJ";
+    bool erreur = false;
+    int xtir = 0;
+    int ytir = 0;
+    do
+    {
+        erreur = false;
+        try
+        {
+            string cotir = Console.ReadLine();
+            xtir = int.Parse(cotir.Substring(1)) - 1;
+            ytir = lettres.IndexOf(cotir[0]);
+            if (listcotirJ.Contains((xtir, ytir))) erreur = true;
+            else if (cotir[0] == null) erreur = true;
+            else if (cotir[1] == null) erreur = true;
+            else if (MapJ[xtir, ytir] == 0) MapJ[xtir, ytir] = 7;
+            else if (MapJ[xtir, ytir] == 6) MapJ[xtir, ytir] = 6;
+            else if (erreur == false) MapJ[xtir, ytir] = -MapJ[xtir, ytir];
+        }
+        catch
+        {
+            erreur = true;
+        }
+    } while (erreur == true);
+    listcotirJ.Add((xtir, ytir));
+}
+void VerifTC(int[,] MapJ)
+{
+    ToucheCoule(MapJ, 1, 5);    ToucheCoule(MapJ, 2, 4);    ToucheCoule(MapJ, 3, 3);    ToucheCoule(MapJ, 4, 3);    ToucheCoule(MapJ, 5, 2);
+}
+void ToucheCoule(int[,] MapJ, int bateau, int taillebateau)
+{
+    int nbtouche = 0;
+    for (int y = 0; y < 10; y++)
+    {
+        for (int x = 0; x < 10; x++)
+        {
+            if (MapJ[x, y] == -bateau) nbtouche++;
+        }
+    }
+    if (nbtouche == taillebateau)
+    {
+        for (int y2 = 0; y2 < 10; y2++)
+        {
+            for (int x2 = 0; x2 < 10; x2++)
+            {
+                if (MapJ[x2, y2] == -bateau) MapJ[x2, y2] = 6;
+            }
+        }
+    }
+}
+bool VerifVict(int[,] MapJ)
+{
+    bool win = false;
+    int compteur = 0;
+    for (int x = 0; x < 10; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            if (MapJ[x, y] == 6) compteur++;
+        }
+    }
+    if (compteur == 17) win = true;
+    return win;
+}
